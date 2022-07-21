@@ -1,4 +1,4 @@
-package ssafy.al.july;
+package al.july;
 
 public class game_devleopment {
 
