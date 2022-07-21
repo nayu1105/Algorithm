@@ -1,4 +1,4 @@
-package al.july;
+package al.jul;
 
 public class game_devleopment {
 
