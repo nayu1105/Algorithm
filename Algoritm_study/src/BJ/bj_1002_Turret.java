@@ -1,10 +1,10 @@
-package al.jul;
+package BJ;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-public class Turret {
+public class bj_1002_Turret {
 	static int T;
 
 	public static void main(String[] args) throws Exception {

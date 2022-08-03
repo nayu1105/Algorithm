@@ -1,9 +1,9 @@
-package algorithm_assignments;
+package SW;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class crops_sw_2805 {
+public class sw_2805_crops {
 	static int[][] crops;
 	static int size;
 

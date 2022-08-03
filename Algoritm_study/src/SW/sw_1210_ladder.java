@@ -1,4 +1,4 @@
-package algorithm_assignments;
+package SW;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class ladder_sw_1210 {
+public class sw_1210_ladder {
 	static int gx, gy; // goal_x, goal_y;
 	static int[] dx = { 0, 0, -1 }; // goal 부터 출발점을 향해 탐색할 방향 : 오른쪽, 왼쪽, 위쪽
 	static int[] dy = { 1, -1, 0 };

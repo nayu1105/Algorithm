@@ -1,11 +1,11 @@
-package algorithm_assignments;
+package SW;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class battle_field_sw_1873 {
+public class sw_1873_battle_field {
 	static int T, H, W; // test_case, 맵의 크기 세로, 가로
 	static char[][] field; // 맵
 	static int dir, x, y; // 바라보는 방향, 현재 전차 위치 x, y

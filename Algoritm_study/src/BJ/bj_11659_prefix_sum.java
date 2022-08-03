@@ -1,11 +1,11 @@
-package algorithm_assignments;
+package BJ;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class prefix_sum_bj_11659 {
+public class bj_11659_prefix_sum {
 	static int N, M;
 	static int[] arr = new int[100001];
 

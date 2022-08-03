@@ -1,9 +1,9 @@
-package algorithm_assignments;
+package BJ;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class recursive_function_bj_17478 {
+public class bj_17478_recursive_function {
 	static int N, r; // 재귀해야하는 수, 재귀 스택 수
 
 	public static void main(String[] args) throws Exception {

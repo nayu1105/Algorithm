@@ -1,11 +1,11 @@
-package algorithm_assignments;
+package BJ;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 //입력을 받으면서 처리할 수 있는 문제는 반드시 그렇게 처리하도록 노력( 입력을 위한 자료구조를 만들 필요 X)
-public class switch_bj_1244 {
+public class bj_1244_switch {
 
 	static int N, COUNT;
 	static int[] switches; // 스위치 배열

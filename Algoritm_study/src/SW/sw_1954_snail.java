@@ -1,11 +1,11 @@
-package algorithm_assignments;
+package SW;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class snail_sw_1954 {
+public class sw_1954_snail {
 	static int T;
 	static int[] dx = { 0, 1, 0, -1 }; // 우, 하, 좌, 상 순서
 	static int[] dy = { 1, 0, -1, 0 };
