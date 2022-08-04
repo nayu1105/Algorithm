@@ -1,8 +1,5 @@
 # Algorithm
 <div>
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=nyj3230@naver.com&show_icons=true&theme=radical)
-</div>
-<div>
 ##Algorithm
 
 - SWEA : sw epxert academy
