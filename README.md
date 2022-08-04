@@ -1,7 +1,6 @@
 # Algorithm
 <div>
-[![Solved.ac
-프로필](http://mazassumnida.wtf/api/v2/generate_badge?boj=nyj3230)](https://solved.ac/nyj3230)
+![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=nyj3230&show_icons=true&theme=radical)
 </div>
 <div>
 ##Algorithm
