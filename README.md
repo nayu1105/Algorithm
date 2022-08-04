@@ -1,6 +1,6 @@
 # Algorithm
 <div>
-##Algorithm
+## Algorithm
 
 - SWEA : sw epxert academy
 
@@ -12,5 +12,5 @@
 
 </div>
 <div>
-##백준 허브 자동연동
+## 백준 허브 자동연동
 </div>
