@@ -16,6 +16,7 @@ public class sw_1218_괄호 {
 		for (int t = 1; t <= 10; t++) {
 			int n = Integer.parseInt(br.readLine());
 			String s = br.readLine();
+			stack.clear();
 			ans = 1;
 
 			for (int j = 0; j < n; j++) {
@@ -40,7 +41,11 @@ public class sw_1218_괄호 {
 				}
 			}
 
+			if (!stack.isEmpty())
+				ans = 0;
+
 			System.out.println("#" + t + " " + ans);
+
 		}
 
 	}
