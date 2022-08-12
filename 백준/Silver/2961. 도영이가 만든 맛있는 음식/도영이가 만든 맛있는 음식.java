@@ -2,10 +2,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-//부분집합
+//dfs
 public class Main {
 	static int T;
-	static Item[] src;
+	static int[][] src;
 	static boolean[] select;
 	static int min = Integer.MAX_VALUE;
 
@@ -14,33 +14,27 @@ public class Main {
 
 		T = Integer.parseInt(br.readLine());
 
-		src = new Item[T];
+		src = new int[T][2];
 		select = new boolean[T];
 		for (int i = 0; i < T; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			src[i] = new Item(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+			src[i][0] = Integer.parseInt(st.nextToken());
+			src[i][1] = Integer.parseInt(st.nextToken());
 		}
 
-		subset(0);
+		dfs(0, 1, 0);
 
 		System.out.print(min);
 	}
 
-	static void subset(int srcIdx) {
+	static void dfs(int srcIdx, int sour, int bitter) {
+
 		if (srcIdx == T) {
-			int sour = 0;
-			int bitter = 0;
-
-			for (int i = 0; i < srcIdx; i++) {
-				if (select[i]) {
-					if (sour == 0)
-						sour = 1;
-					sour *= src[i].s;
-					bitter += src[i].b;
-				}
+			int cnt = 0;
+			while (cnt < T && !select[cnt]) {
+				cnt++;
 			}
-
-			if (sour == 0)
+			if (cnt == T)
 				return;
 
 			min = Math.min(min, Math.abs(sour - bitter));
@@ -48,26 +42,9 @@ public class Main {
 			return;
 		}
 
-		select[srcIdx] = true;
-		subset(srcIdx + 1);
-
 		select[srcIdx] = false;
-		subset(srcIdx + 1);
-	}
-
-	static class Item {
-		int s; // 신맛
-		int b; // 쓴맛
-
-		public Item(int s, int b) {
-			this.s = s;
-			this.b = b;
-		}
-
-		@Override
-		public String toString() {
-			return "Item [s=" + s + ", b=" + b + "]";
-		}
-
+		dfs(srcIdx + 1, sour, bitter); // 선택 X
+		select[srcIdx] = true;
+		dfs(srcIdx + 1, sour *= src[srcIdx][0], bitter + src[srcIdx][1]); // 선택 O
 	}
 }
