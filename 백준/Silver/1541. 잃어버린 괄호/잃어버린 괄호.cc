@@ -1,30 +1,27 @@
-#include<iostream>
-#include<sstream>
-#include<string>
-using namespace std;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 
-int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	
-	string s, sb, sbb;
-	getline(cin, s);
-	istringstream ss(s);
-
-	int result = 0, temp = 0;
-	int i = 0;
-	while (getline(ss, sb, '-')) {
-		istringstream sss(sb);
-		while (getline(sss, sbb, '+')) {
-			temp += stoi(sbb);
+public class Main {
+	static String[] s, ss;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int ans=0;
+		
+		s  = br.readLine().split("-");
+		ss = s[0].split("\\+");
+		for (int j = 0; j < ss.length; j++) {
+			ans += Integer.parseInt(ss[j]);
 		}
-		if (i == 0)result += temp;
-		else result -= temp;
-		temp = 0;
-		i++;
+		// split된 앞부분만 더하기
+		for (int i = 1; i < s.length; i++) {
+			ss = s[i].split("\\+");
+			for (int j = 0; j < ss.length; j++) {
+				ans -= Integer.parseInt(ss[j]);
+			}
+		} // - 만난 순간 다 빼기
+		
+		
+		System.out.println(ans);
 	}
-	
-	cout << result;
-
 }
