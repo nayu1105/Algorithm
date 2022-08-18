@@ -31,7 +31,7 @@ public class bj_1260_DFS와BFS {
 			int to = Integer.parseInt(st.nextToken());
 			map[from][to] = true;
 			map[to][from] = true;
-		}
+		} 
 
 		Arrays.fill(visited, false);
 		dfs(V);
