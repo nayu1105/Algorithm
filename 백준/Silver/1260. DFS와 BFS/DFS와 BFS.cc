@@ -1,53 +1,75 @@
-#include<iostream>
-#include<queue>
+package algorithm_assignments;
 
-using namespace std;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
-bool arr[1001][1001];
-bool arr2[1001];
-bool arr3[1001];
-queue <int> q;
-int node, edge, start;
+//이차원 배열, 인접 행렬
+public class bj_1260_DFS와BFS {
+	static int N, M, V;
+	static boolean[] visited;
+	static boolean[][] map;
+	static StringBuilder sb = new StringBuilder();
 
-void dfs(int a) {
-	cout << a << " ";
-	arr2[a] = true;
-	for (int i = 1; i <= node; i++) {
-		if (arr[a][i]&&!arr2[i])dfs(i);
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		V = Integer.parseInt(st.nextToken());
+
+		map = new boolean[N + 1][N + 1];
+		visited = new boolean[N + 1];
+
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			map[from][to] = true;
+			map[to][from] = true;
+		}
+
+		Arrays.fill(visited, false);
+		dfs(V);
+		sb.append("\n");
+
+		Arrays.fill(visited, false);
+		bfs(V);
+
+		System.out.println(sb);
+
 	}
-}
 
-void bfs() {
-	if (q.empty())return;
-	else {
-		int t = q.front();
-		q.pop();
-		cout << t << " ";
-		arr3[t] = true;
-		for (int i = 1; i <= node; i++) {
-			if (arr[t][i] && !arr3[i]) {
-				q.push(i);
-				arr3[i] = true;
+	static void dfs(int n) {
+		visited[n] = true;
+		sb.append(n).append(" ");
+		for (int i = 1; i <= N; i++) {
+			if (map[n][i] == true && !visited[i]) {
+				dfs(i);
 			}
 		}
-		bfs();
-	}
-}
-int main(){
-	
-	cin >> node >> edge >> start;
-	
-	int s, e;
-
-	for (int i = 0; i < edge; i++) {
-		cin >> s >> e;
-		arr[s][e] = true;
-		arr[e][s] = true;
 	}
 
-	dfs(start);
-	cout << "\n";
-	q.push(start);
-	bfs();
+	static void bfs(int n) {
+		Queue<Integer> q = new ArrayDeque<Integer>();
 
+		q.offer(n);
+		visited[n] = true;
+
+		while (!q.isEmpty()) {
+			int temp = q.poll();
+			sb.append(temp).append(" ");
+
+			for (int i = 1; i <= N; i++) {
+				if (map[temp][i] == true && !visited[i]) {
+					visited[i] = true;
+					q.offer(i);
+				}
+			}
+		}
+	}
 }
