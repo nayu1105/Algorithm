@@ -1,14 +1,12 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int R, C, max = Integer.MIN_VALUE;
-	static char[][] map;
-	static boolean[] visit = new boolean[26];
-	static int[] dx = { 0, 1, 0, -1 }; // CW
-	static int[] dy = { -1, 0, 1, 0 };
+	static int R, C, max;
+	static int[][] map;
+	static int[] dy = { -1, 1, 0, 0 };
+	static int[] dx = { 0, 0, -1, 1 };
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,40 +15,38 @@ public class Main {
 		R = Integer.parseInt(st.nextToken());
 		C = Integer.parseInt(st.nextToken());
 
-		map = new char[R][C];
+		map = new int[R][C];
 
 		for (int i = 0; i < R; i++) {
-			map[i] = br.readLine().toCharArray();
+			char[] temp = br.readLine().toCharArray();
+			for (int j = 0; j < C; j++) {
+				map[i][j] = temp[j] - 'A'; // A - 0, B - 1, ...
+			}
 		}
-		// 입력 끝
 
-		dfs(0, 0, 1);
+		max = Integer.MIN_VALUE;
+
+		// map[0][0] ---> 어떤 integer 값이 있을 건데 그 값을 1을 << 수행
+		dfs(0, 0, 1, 1 << map[0][0]);
 
 		System.out.println(max);
-
 	}
 
-	static void dfs(int y, int x, int d) {
-		if (visit[(int) (map[y][x] - 'A')]) {
-			max = Math.max(max, d -1);
-			return;
-		}
-		visit[(int) (map[y][x] - 'A')] = true;
+	// 좌표를 방문하면(알파벳)
+	// 방문할 때 마다 max 체크
+	static void dfs(int y, int x, int cnt, int visit) {
+		max = Math.max(max, cnt);
+
+		// 다음 방문이 가능하면 다시 방문
 		for (int i = 0; i < 4; i++) {
 			int nx = x + dx[i];
 			int ny = y + dy[i];
 
-			if (!check(ny, nx))
+			if (ny < 0 || nx < 0 || ny >= R || nx >= C || (visit & 1 << map[ny][nx]) != 0)
 				continue;
 
-			dfs(ny, nx, d + 1);
-
+			dfs(ny, nx, cnt + 1, visit | 1 << map[ny][nx]);
 		}
-		visit[(int) (map[y][x] - 'A')] = false;
 
-	}
-
-	static boolean check(int y, int x) {
-		return x >= 0 && x < C && y >= 0 && y < R;
 	}
 }
