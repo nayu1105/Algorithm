@@ -24,15 +24,18 @@ public class Main {
 		}
 		// 입력 끝
 
-		visit[(int) (map[0][0] - 'A')] = true;
-		dfs(0, 0, 1, visit);
+		dfs(0, 0, 1);
 
 		System.out.println(max);
 
 	}
 
-	static void dfs(int y, int x, int d, boolean[] visited) {
-
+	static void dfs(int y, int x, int d) {
+		if (visit[(int) (map[y][x] - 'A')]) {
+			max = Math.max(max, d -1);
+			return;
+		}
+		visit[(int) (map[y][x] - 'A')] = true;
 		for (int i = 0; i < 4; i++) {
 			int nx = x + dx[i];
 			int ny = y + dy[i];
@@ -40,15 +43,11 @@ public class Main {
 			if (!check(ny, nx))
 				continue;
 
-			if (!visited[(int) (map[ny][nx] - 'A')]) {
-				boolean[] v= Arrays.copyOfRange(visited, 0, visited.length);
-				v[(int) (map[ny][nx] - 'A')] = true;
-				dfs(ny, nx, d + 1, v);
-				
-			}
+			dfs(ny, nx, d + 1);
 
 		}
-		max = Math.max(max, d);
+		visit[(int) (map[y][x] - 'A')] = false;
+
 	}
 
 	static boolean check(int y, int x) {
