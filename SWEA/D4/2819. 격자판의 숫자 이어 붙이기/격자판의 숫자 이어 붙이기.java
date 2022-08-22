@@ -35,7 +35,7 @@ public class Solution {
 	}
 
 	private static void npr(int r, int c, int cnt, int[] ls) {
-		if (cnt == 7) {
+		if (cnt == 6) {
 			String s = "";
 			for (int i = 0; i < ls.length; i++) {
 				s += ls[i];
@@ -53,7 +53,7 @@ public class Solution {
 			if (!check(nr, nc))
 				continue;
 
-			ls[cnt] = map[nr][nc];
+			ls[cnt + 1] = map[nr][nc];
 			npr(nr, nc, cnt + 1, ls);
 		}
 
