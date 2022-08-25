@@ -7,23 +7,21 @@ import java.util.StringTokenizer;
 
 public class Solution {
 	static int V, E;
-	static ArrayList<ArrayList<Integer>> list;
+	static ArrayList<ArrayList<Integer>> Edge;
 	static int[] inDegree;
-	static ArrayList<Integer> ans ;
 	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		for (int t = 1; t <= 10; t++) {
-			list =new ArrayList<>();
-			ans = new ArrayList<>();
+			Edge = new ArrayList<>();
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			V = Integer.parseInt(st.nextToken());
 			E = Integer.parseInt(st.nextToken());
 
 			for (int i = 0; i < V + 1; i++) {
-				list.add(new ArrayList<Integer>());
+				Edge.add(new ArrayList<Integer>());
 			}
 
 			inDegree = new int[V + 1];
@@ -33,21 +31,18 @@ public class Solution {
 				int v1 = Integer.parseInt(st.nextToken());
 				int v2 = Integer.parseInt(st.nextToken());
 
-				list.get(v1).add(v2);
+				Edge.get(v1).add(v2);
 				inDegree[v2]++;
 
 			}
 
 			// list 완성
-			topoloySort();
 
 			sb.append("#").append(t);
-			for (int i : ans) {
-				sb.append(" ").append(i);
-			}
+			topoloySort(); // 위상정렬
 			sb.append('\n');
 		}
-		
+
 		System.out.println(sb);
 	}
 
@@ -56,19 +51,18 @@ public class Solution {
 
 		for (int i = 1; i <= V; i++) {
 			if (inDegree[i] == 0) {
-				queue.offer(i);				
+				queue.offer(i);
 			}
-
 		}
 
 		while (!queue.isEmpty()) {
 			int cur = queue.poll();
-			ans.add(cur);
-			ArrayList<Integer> l = list.get(cur);
-			int size = l.size();
+			sb.append(" ").append(cur);
+			ArrayList<Integer> e = Edge.get(cur);
+			int size = e.size();
 			for (int i = 0; i < size; i++) {
-				if (--inDegree[l.get(i)] == 0) {
-					queue.offer(l.get(i));
+				if (--inDegree[e.get(i)] == 0) {
+					queue.offer(e.get(i));
 				}
 			}
 		}
