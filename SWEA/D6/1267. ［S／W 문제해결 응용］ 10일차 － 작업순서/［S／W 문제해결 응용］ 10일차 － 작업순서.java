@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 public class Solution {
 	static int V, E;
-	static ArrayList<ArrayList<Node>> list;
+	static ArrayList<ArrayList<Integer>> list;
 	static int[] inDegree;
 	static ArrayList<Integer> ans ;
 	static StringBuilder sb = new StringBuilder();
@@ -23,7 +23,7 @@ public class Solution {
 			E = Integer.parseInt(st.nextToken());
 
 			for (int i = 0; i < V + 1; i++) {
-				list.add(new ArrayList<Node>());
+				list.add(new ArrayList<Integer>());
 			}
 
 			inDegree = new int[V + 1];
@@ -33,7 +33,7 @@ public class Solution {
 				int v1 = Integer.parseInt(st.nextToken());
 				int v2 = Integer.parseInt(st.nextToken());
 
-				list.get(v1).add(new Node(v2));
+				list.get(v1).add(v2);
 				inDegree[v2]++;
 
 			}
@@ -64,22 +64,13 @@ public class Solution {
 		while (!queue.isEmpty()) {
 			int cur = queue.poll();
 			ans.add(cur);
-			ArrayList<Node> l = list.get(cur);
+			ArrayList<Integer> l = list.get(cur);
 			int size = l.size();
 			for (int i = 0; i < size; i++) {
-				if (--inDegree[l.get(i).v] == 0) {
-					queue.offer(l.get(i).v);
+				if (--inDegree[l.get(i)] == 0) {
+					queue.offer(l.get(i));
 				}
 			}
 		}
-	}
-
-	static class Node {
-		int v;
-
-		public Node(int v) {
-			this.v = v;
-		}
-
 	}
 }
