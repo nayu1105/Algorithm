@@ -54,6 +54,8 @@ public class Main {
 		while (!queue.isEmpty()) {
 			int[] cur = queue.poll();
 			visit[cur[0]][cur[1]] = true;
+			if (cur[0] == N - 1 && cur[1] == N - 1)
+				return; // 최소 거리로 도착했기 때문에 종료시켜도 됨
 
 			for (int i = 0; i < 4; i++) {
 				int ny = cur[0] + dy[i];
