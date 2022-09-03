@@ -18,7 +18,7 @@ public class Main {
 
 		// 비행기를 최대한 태우려면 1~입렵숫자 게이트 중 하나인 조건에서 입력숫자와 가장 가까운 곳에 차곡차곡 넣어야함
 		// 시간 1초를 고려해보았을 때 완전탐색은 오래걸림
-		// Union Find 로, 자신보다 앞서 최선의 선택인 자리를 부모로 가지고 있으면 시간초과 해결
+		// Find 로, 자신보다 앞서 최선의 선택인 자리를 부모로 가지고 있으면 시간초과 해결
 
 		int ans = 0;
 
@@ -41,11 +41,7 @@ public class Main {
 			gate[i] = i;
 		}
 	}
-
-	static void Union() {
-
-	}
-
+	
 	static int Find(int n) {
 		if (gate[n] == n)
 			return n;
