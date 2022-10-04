@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Main {
 	static int[][] map = new int[9][9];
@@ -54,7 +53,8 @@ public class Main {
 			map[y][x] = i;
 			int ny = list.get(idx + 1)[0];
 			int nx = list.get(idx + 1)[1];
-			if(go(ny, nx, idx + 1))return true;
+			if (go(ny, nx, idx + 1))
+				return true;
 			map[y][x] = 0;
 
 		}
@@ -62,30 +62,24 @@ public class Main {
 	}
 
 	private static boolean check(int y, int x, int v) {
-		HashSet<Integer> set = new HashSet<>();
 		for (int i = 0; i < 9; i++) { // 가로
-			set.add(map[i][x]);
+			if (map[i][x] == v)
+				return false;
 		}
-		if (set.contains(v))
-			return false;
 
-		set.clear();
 		for (int i = 0; i < 9; i++) { // 세로
-			set.add(map[y][i]);
+			if (map[y][i] == v)
+				return false;
 		}
-		if (set.contains(v))
-			return false;
 
-		set.clear();
 		for (int i = (y / 3) * 3; i < (y / 3) * 3 + 3; i++) { // 3*3
 			for (int j = (x / 3) * 3; j < (x / 3) * 3 + 3; j++) {
-				set.add(map[i][j]);
+				if (map[i][j] == v)
+					return false;
 			}
 		}
-		if (set.contains(v))
-			return false;
-		else
-			return true;
+
+		return true;
 	}
 
 }
