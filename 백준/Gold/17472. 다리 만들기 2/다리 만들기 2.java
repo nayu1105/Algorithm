@@ -1,28 +1,28 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
+// 프림
+// 정점 중심
+// 최소 비용의 정점 선택하면서 완성, 선택된 정점으로부터 갈 수 있는 다른 정점들을 모두 고려 대상으로! (visit)
 public class Main {
-	static int N, M;
+
+	static int N, M, min;
 	static int[][] map;
-	static int[][] cost;
-
-	// makeMap
-	static int island = 1;
-	static Queue<Node> queue = new ArrayDeque<>();
+// dfs
 	static boolean[][] visit;
+	static int[] dy = { -1, 1, 0, 0 };
+	static int[] dx = { 0, 0, -1, 1 };
 
-	// prim
-	static PriorityQueue<Edge> pq = new PriorityQueue<>((e1, e2) -> e1.w - e2.w);
-	static boolean[] select;
-	static int min = 0;
+// 정점, 간선
+	static int V; // 정점의 수
+	static PriorityQueue<Edge> pqueue = new PriorityQueue<Edge>((e1, e2) -> e1.cost - e2.cost);
 
-	static int[] dy = { 0, 0, 1, -1 }; // 우 - 좌 - 하 - 상
-	static int[] dx = { 1, -1, 0, 0 };
+	// 프림
+	static ArrayList<ArrayList<Edge>> vertex;
+	static boolean[] visitPrim;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -33,188 +33,167 @@ public class Main {
 		map = new int[N][M];
 		visit = new boolean[N][M];
 
+		// map 입력
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < M; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
+				map[i][j] = Integer.parseInt(st.nextToken()) * (-1); // 육지를 -1 로 <= 정점번호를 1부터 ..
 			}
 		}
 
-		// makeMap
-
+		// 풀이
+		// dfs 로 번호 붙이기
+		int num = 1;
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
-				if (map[i][j] == 1 && !visit[i][j]) {
-					visit[i][j] = true;
-					map[i][j] = island;
-					queue.offer(new Node(i, j));
-					bfs();
+				if (map[i][j] == -1 && !visit[i][j]) {
+					dfs(i, j, num); // num 번호를 i, j 와 연결된 모든 곳에 저장
+					num++;
 				}
 			}
 		}
 
-		// makeBridge & cost
-		makeBridge();
+		// 정점의 수
+		V = num - 1;
 
-		// prim
-		if (prim())
-			System.out.println(min);
-		else
-			System.out.println(-1);
-
-		// 1. dfs 섬 갯수만큼 1,2,3,... map에 체크해놓기
-		// 2. map 탐색하며 바다가 아닌 경우(!=0) 다리 놓기 시작
-		// 4. 다리 건설 비용 cost[][]에 기록
-		// 5. 계산된 모든 비용으로 mst 계산하기 (prim 사용)
-		// 6. 연결되었으면 비용합 출력, 안되면 -1 출력
-
-	}
-
-	private static boolean prim() {
-		select = new boolean[island];
-		for (int i = 2; i < island; i++) { // 0은 dummy 1은 자기 자신이기에 X
-			if (cost[1][i] != Integer.MAX_VALUE) {
-				pq.add(new Edge(i, cost[1][i]));
-			}
-		} // pq 초기화
-
-		select[1] = true;
-		int cntSelected = 1;
-
-		while (cntSelected != island - 1) {
-
-			Edge edge = null;
-			while (!pq.isEmpty()) { // 선택 안된 섬의 최소 비용 edge 선택
-				edge = pq.poll();
-				if (select[edge.v])
-					continue; // select 한 edge는 제외
-				break;
-			}
-			if (edge == null)
-				break;
-
-			if (select[edge.v]) // edge 선택 X
-				break;
-
-			select[edge.v] = true;
-			min += edge.w;
-			for (int i = 1; i < island; i++) {
-				if (cost[edge.v][i] != Integer.MAX_VALUE) {
-					pq.add(new Edge(i, cost[edge.v][i]));
-				}
-			}
-
-			cntSelected++;
-
+		// 프림
+		vertex = new ArrayList<>();
+		for (int i = 0; i <= V; i++) {
+			vertex.add(new ArrayList<Edge>());
 		}
 
-		if (cntSelected == island - 1)
-			return true;
-		else
-			return false;
+		visitPrim = new boolean[V + 1];
 
+		// 크루스칼
+		// 간선 계산
+		hr(); // 옆으로
+		vr(); // 밑으로
+
+		int cnt = 1;
+		visitPrim[1] = true;
+		pqueue.addAll(vertex.get(1));
+		while (!pqueue.isEmpty()) {
+			Edge edge = pqueue.poll();
+			if (visitPrim[edge.v])
+				continue;
+			pqueue.addAll(vertex.get(edge.v));
+			visitPrim[edge.v] = true;
+			min += edge.cost;
+			cnt++;
+			if (cnt == V)
+				break;
+		}
+		if (cnt != V)
+			min = -1;
+		System.out.println(min == 0 ? -1 : min);
 	}
 
-	private static void makeBridge() {
+	static void addEdge(int v1, int v2, int cost) {
+		boolean same = false;
 
-		cost = new int[island][island];// 0 dummy. island는 총 섬 갯수 + 1 이 되어있기때문에.
-		for (int i = 0; i < island; i++) {
-			Arrays.fill(cost[i], Integer.MAX_VALUE);
+		for (Edge edge : vertex.get(v1)) {
+			if (edge.v == v2) {
+				same = true;
+				edge.cost = Math.min(edge.cost, cost);
+				break;
+			}
 		}
+		if (!same)
+			vertex.get(v1).add(new Edge(v2, cost));
+	}
 
+	static void hr() {
 		for (int i = 0; i < N; i++) {
+			int prev = 0;
+			int curr = 0;
+			int v1 = 0;
+			int v2 = 0;
+			int cost = 0;
+
 			for (int j = 0; j < M; j++) {
-				if (map[i][j] != 0) {
-					dfs(new Node(i, j), map[i][j]);
+				curr = map[i][j];
+				if (prev == 0 && curr != 0) { // 0 ( 바다, 시작 경계선) -> 0 아님 ( 섬 )
+					if (v1 == 0)
+						v1 = curr; // 시작 경계선
+					else {
+						// edge 발생
+						v2 = curr;
+						if (cost > 1) {
+							addEdge(v1, v2, cost); // 간선 확정
+							addEdge(v2, v1, cost);
+						}
+
+						v1 = v2;
+						v2 = 0;
+						cost = 0;
+					}
+				} else if (v1 != 0 && curr == 0) {
+					cost++;
 				}
+
+				prev = curr;
 			}
+
 		}
 	}
 
-	private static void dfs(Node node, int num) {
-		for (int i = 0; i < 4; i++) { // 4방 dfs 탐색
-			int ny = node.y;
-			int nx = node.x;
-			int d = 0;
-			while (true) {
-				ny += dy[i]; // 탐색 좌표
-				nx += dx[i];
+	static void vr() {
+		for (int i = 0; i < M; i++) {
+			int prev = 0;
+			int curr = 0;
+			int v1 = 0;
+			int v2 = 0;
+			int cost = 0;
 
-				if (!check(ny, nx))
-					break; // 범위 체크
-				if (map[ny][nx] == num)
-					break; // 자기 자신의 섬이면 break;
+			for (int j = 0; j < N; j++) {
+				curr = map[j][i];
+				if (prev == 0 && curr != 0) { // 0 ( 바다, 시작 경계선) -> 0 아님 ( 섬 )
+					if (v1 == 0)
+						v1 = curr; // 시작 경계선
+					else {
+						// edge 발생
+						v2 = curr;
+						if (cost > 1) {
+							addEdge(v1, v2, cost); // 간선 확정
+							addEdge(v2, v1, cost);
+						}
 
-				if (map[ny][nx] != 0) { // 다른 섬을 만나면
-					if (d < 2) // distance 2이상만 다리 건설
-						break;
-
-					cost[num][map[ny][nx]] = Math.min(cost[num][map[ny][nx]], d); // 현재 섬에서 map[ny][nx]로 가는 최소 비용 갱신
-					break;
+						v1 = v2;
+						v2 = 0;
+						cost = 0;
+					}
+				} else if (v1 != 0 && curr == 0) {
+					cost++;
 				}
 
-				d++; // distance 갱신. 0이면 계속 탐색
+				prev = curr;
 			}
+
 		}
 	}
 
-	private static void bfs() {
+	static void dfs(int y, int x, int num) {
+		visit[y][x] = true;
+		map[y][x] = num;
 
-		while (!queue.isEmpty()) {
-			Node node = queue.poll();
-			for (int i = 0; i < 4; i++) {
-				int ny = node.y + dy[i];
-				int nx = node.x + dx[i];
+		for (int d = 0; d < 4; d++) {
+			int ny = y + dy[d];
+			int nx = x + dx[d];
 
-				if (!check(ny, nx))
-					continue;
-
-				if (visit[ny][nx])
-					continue;
-
-				if (map[ny][nx] == 1) {
-					queue.add(new Node(ny, nx));
-					visit[ny][nx] = true;
-					map[ny][nx] = island;
-				}
-			}
+			if (ny < 0 || nx < 0 || ny >= N || nx >= M || visit[ny][nx])
+				continue;
+			if (map[ny][nx] == -1)
+				dfs(ny, nx, num);
 		}
-
-		island++;
 	}
 
-	private static boolean check(int y, int x) {
-		return y >= 0 && y < N && x >= 0 && x < M;
-	}
-
+// 간선
 	static class Edge {
-		int v, w;
+		int v, cost;
 
-		Edge(int v, int w) {
+		Edge(int v, int cost) {
 			this.v = v;
-			this.w = w;
+			this.cost = cost;
 		}
-
-		@Override
-		public String toString() {
-			return "Edge [v=" + v + ", w=" + w + "]";
-		}
-
 	}
-
-	static class Node {
-		int y, x;
-
-		Node(int y, int x) {
-			this.y = y;
-			this.x = x;
-		}
-
-		@Override
-		public String toString() {
-			return "Node [y=" + y + ", x=" + x + "]";
-		}
-
-	}
-
 }
