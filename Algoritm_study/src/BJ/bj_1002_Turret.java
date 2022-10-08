@@ -12,6 +12,7 @@ public class bj_1002_Turret {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		T = Integer.parseInt(br.readLine());
+		
 
 		for (int i = 0; i < T; i++) {
 			String s = br.readLine();
