@@ -1,63 +1,67 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int N, ans, eat;
+	static int N;
 	static int[][] map;
-	static int[] dx = { 0, -1, 1, 0 }; // 상-좌-우-하 순서 . 가장 위쪽 > 왼쪽 우선순위
-	static int[] dy = { -1, 0, 0, 1 };
-	static Queue<Node> queue = new ArrayDeque<>();
+	static Node shark;
+	static int size = 2, eat = 0, time = 0;
+	static int[] dy = { 0, 0, 1, -1 };
+	static int[] dx = { 1, -1, 0, 0 };
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		N = Integer.parseInt(br.readLine());
+
 		map = new int[N][N];
-
-		StringTokenizer st;
-
 		for (int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < N; j++) {
 				int n = Integer.parseInt(st.nextToken());
 				map[i][j] = n;
 				if (n == 9) {
-					queue.offer(new Node(i, j, 2)); // 아기상어 level2
+					shark = new Node(i, j);
 				}
 			}
 		}
-		// 입력 끝
-		while (true) {
-			Node n = queue.peek();
-			if (!bfs(n))
-				break;
-		}
 
-		System.out.println(ans);
+		// 전략
+		// 상어 위치로 부터 bfs 하며 갈 수 있는 priority queue에 담기
+		// ! pq.isEmpty : pq poll 해서 자리 옮기기
+		// pq.isEmpty : bfs
+		// bfs 가 모두 종료했음에도 pq가 비었다면 종료
+
+		simul();
+
+		System.out.println(time);
 	}
 
-	static boolean bfs(Node node) {
+	static void simul() {
+		while (bfs()) {
+		}
+	}
 
-		int d = 0;
+	static boolean bfs() {
+		Queue<Node> queue = new ArrayDeque<>();
+		PriorityQueue<Node> pq = new PriorityQueue<>((p1, p2) -> p1.y == p2.y ? p1.x - p2.x : p1.y - p2.y);
 
 		boolean[][] visit = new boolean[N][N];
-		visit[node.y][node.x] = true;
+		queue.offer(shark);
+		visit[shark.y][shark.x] = true;
+		int temp = 0;
+		while (!queue.isEmpty()) {
+			int qSize = queue.size();
+			temp++;
+			for (int s = 0; s < qSize; s++) {
+				Node node = queue.poll();
 
-		ArrayList<Node> list = new ArrayList<>(); // 정답 답을 리스트. 나중에 y 기준 sort
-		boolean flag = true;
-
-		while (!queue.isEmpty() && flag) {
-			int size = queue.size();
-			d++;
-			for (int i = 0; i < size; i++) {
-				Node n = queue.poll();
-				for (int j = 0; j < 4; j++) {
-					int nx = n.x + dx[j];
-					int ny = n.y + dy[j];
+				for (int i = 0; i < 4; i++) {
+					int ny = node.y + dy[i];
+					int nx = node.x + dx[i];
 
 					if (!check(ny, nx))
 						continue;
@@ -65,55 +69,58 @@ public class Main {
 					if (visit[ny][nx])
 						continue;
 
-					if (map[ny][nx] != 0 && map[ny][nx] < node.s) {
-						list.add(new Node(ny, nx, node.s));
-
-						flag = false;
+					if (map[ny][nx] == 0 || map[ny][nx] == size) {
+						queue.offer(new Node(ny, nx));
+						visit[ny][nx] = true;
+						continue;
 					}
 
-					else if (map[ny][nx] == node.s || map[ny][nx] == 0) {// 같거나 빈칸이면 큐에 넣기
+					if (map[ny][nx] < size) {
+						pq.offer(new Node(ny, nx));
 						visit[ny][nx] = true;
-						queue.offer(new Node(ny, nx, map[ny][nx]));
+						continue;
 					}
 
 				}
 			}
+
+			if (!pq.isEmpty())
+				break;
 		}
 
-		if (flag == false) {
-			Collections.sort(list, (l1, l2) -> l1.y == l2.y ? l1.x - l2.x : l1.y - l2.y);
-			Node ns = list.get(0);
-
-			map[ns.y][ns.x] = 9;
-			map[node.y][node.x] = 0;
-
-			queue.clear(); // 다음 계산을 위한 queue 준비( clear, 자기자신 삽입)
-
+		if (pq.isEmpty())
+			return false;
+		else {
+			map[shark.y][shark.x] = 0;
+			shark = pq.poll();
+			map[shark.y][shark.x] = 9;
+			time += temp;
 			eat++;
-			if (ns.s == eat) {
-				ns.s++;
+
+			if (size == eat) {
+				size++;
 				eat = 0;
 			}
 
-			queue.offer(ns);
-			ans += d;
 			return true;
 		}
-
-		return false;
 	}
 
-	static boolean check(int y, int x) {
+	private static boolean check(int y, int x) {
 		return y >= 0 && y < N && x >= 0 && x < N;
 	}
 
 	static class Node {
-		int y, x, s;
+		int y, x;
 
-		public Node(int y, int x, int s) {
+		public Node(int y, int x) {
 			this.y = y;
 			this.x = x;
-			this.s = s;
+		}
+
+		@Override
+		public String toString() {
+			return "Node [y=" + y + ", x=" + x + "]";
 		}
 
 	}
