@@ -9,20 +9,16 @@ class Solution {
                 if(i==1&&j==1)continue;
                 
                 if(isPool(i, j, puddles)){
-                // System.out.print(map[i][j] + " ");
                     continue;
                 }
                 
                 map[i][j] = (map[i-1][j] + map[i][j-1]) % 1000000007;
                 
-                // System.out.print(map[i][j] + " ");
             }
-            // System.out.println();
         }
         
         int answer = (int) map[m][n] % 1000000007;
         
-        // System.out.println("answer" + answer);
         return answer;
     }
     
