@@ -1,18 +1,19 @@
 import java.util.*;
 class Solution {
     public int solution(int[] A, int[] B) {
-        Integer[] arrA = Arrays.stream(A).boxed().toArray(Integer[]::new);
-         Integer[] arrB = Arrays.stream(B).boxed().toArray(Integer[]::new);
-        Arrays.sort(arrA, Collections.reverseOrder());
-        Arrays.sort(arrB, Collections.reverseOrder());
+        
+        Arrays.sort(A);
+        Arrays.sort(B);
         
         int answer=0;
-        int indexB =0;
-        for(int i=0; i<A.length;i++){
-            if(arrB[indexB]>arrA[i]){
+        int indexB = B.length-1
+            ;
+        for(int i=A.length-1; i>=0;i--){
+            if(B[indexB]>A[i]){
                 answer++;
-                indexB++;
+                indexB--;
             }
+            if(indexB==-1)break;
         }
         return answer;
     }
