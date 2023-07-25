@@ -1,15 +1,6 @@
 import java.util.*;
 class Solution {
-    public static void main(String[] args) {
-		String[] genres = new String[] { "classic", "pop", "classic", "classic", "pop" };
-		int[] plays = new int[] { 500, 600, 150, 800, 2500 };
-		int[] answer = solution(genres, plays);
-		for (int i = 0; i < answer.length; i++) {
-			System.out.println(answer[i]);
-		}
-	}
-
-	static public int[] solution(String[] genres, int[] plays) {
+    public int[] solution(String[] genres, int[] plays) {
 		HashMap<String, Integer> map = new HashMap<>();
 		List<Integer> sum = new ArrayList<>();
 		List<PriorityQueue<Music>> pqList = new ArrayList<>();
