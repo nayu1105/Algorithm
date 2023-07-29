@@ -12,22 +12,20 @@ class Solution {
 		}
 
 		while (!(sortArray.isEmpty() && pq.isEmpty())) {
+			while (!sortArray.isEmpty() && sortArray.peek()[0] <= time) {
+				int[] temp2 = sortArray.poll();
+				pq.add(temp2);
+			}
+
 			if (pq.isEmpty()) {
 				int[] temp = sortArray.poll();
 				time = temp[0];
 				pq.add(temp);
-				while (!sortArray.isEmpty() && sortArray.peek()[0] <= time) {
-					int[] temp2 = sortArray.poll();
-					pq.add(temp2);
-				}
 			} else {
 				int[] temp = pq.poll();
 				answer += (time - temp[0]) + temp[1];
 				time += temp[1];
-				while (!sortArray.isEmpty() && sortArray.peek()[0] <= time) {
-					int[] temp2 = sortArray.poll();
-					pq.add(temp2);
-				}
+
 			}
 
 		}
