@@ -11,16 +11,15 @@
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         // 초기화
-        ListNode answer = new ListNode((l1.val + l2.val)%10);        
-        int temp  = (l1.val + l2.val)/10;
-        l1 = l1.next;
-        l2 = l2.next;
-             
-        ListNode next = answer;
+        ListNode answer = new ListNode();
+        answer.next = new ListNode();
+        ListNode next = answer.next;
 
-        while(l1 != null || l2 != null){
+        int temp = 0;
+
+        while(l1 != null || l2 != null){     
             next.next = new ListNode();
-            next = next.next;
+            next = next.next;     
 
             if(l1==null){
                 temp += l2.val;
@@ -36,14 +35,16 @@ class Solution {
             }
 
             next.val = temp%10;
-            temp /= 10;            
+            temp /= 10;
+           
         }
 
         if(temp != 0){
             next.next = new ListNode();
-            next.next.val = temp;
+            next = next.next;
+            next.val = temp;
         }
 
-        return answer;
+        return answer.next.next;
     }
 }
