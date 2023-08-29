@@ -2,32 +2,39 @@ import java.util.*;
 
 class MinStack {
 
-    private final Stack<Integer> stack;  
-
-    private final PriorityQueue<Integer> queue;
+    private Stack<Node> stack;  
 
     public MinStack() {
         stack = new Stack<>();
-        queue = new PriorityQueue<>();
     }
     
     public void push(int val) {
-        stack.push(val);
-        queue.add(val);
+        if(stack.size() == 0){stack.push(new Node(val, val));}
+        else{
+            stack.push(new Node(val, val < stack.peek().min ? val : stack.peek().min));
+        }        
     }
     
     public void pop() {
-        int val = stack.peek();
         stack.pop();
-        queue.remove(val);
     }
     
     public int top() {
-        return stack.peek();
+        return stack.peek().val;
     }
     
     public int getMin() {
-        return queue.peek();
+        return stack.peek().min;
+    }
+
+    class Node{
+        int val;
+        int min;
+
+        public Node(int val, int min){
+            this.val = val;
+            this. min = min;
+        }
     }
 }
 
