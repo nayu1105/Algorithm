@@ -1,39 +1,41 @@
-import java.util.*;
-
 class MinStack {
 
-    private Stack<Node> stack;  
+    Node head;
 
     public MinStack() {
-        stack = new Stack<>();
+       head = new Node(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
     
     public void push(int val) {
-        if(stack.size() == 0){stack.push(new Node(val, val));}
-        else{
-            stack.push(new Node(val, val < stack.peek().min ? val : stack.peek().min));
-        }        
+        head = new Node(val, head.min < val ? head.min : val, head);
     }
     
     public void pop() {
-        stack.pop();
+        head = head.pre;
     }
     
     public int top() {
-        return stack.peek().val;
+        return head.val;
     }
     
     public int getMin() {
-        return stack.peek().min;
+        return head.min;
     }
 
     class Node{
         int val;
         int min;
+        Node pre;
 
         public Node(int val, int min){
             this.val = val;
-            this. min = min;
+            this.min = min;
+        }
+
+        public Node(int val, int min, Node pre){
+            this.val = val;
+            this.min = min;
+            this.pre = pre;
         }
     }
 }
